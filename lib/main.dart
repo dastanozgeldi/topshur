@@ -279,6 +279,8 @@ class _AudioRecorderPageState extends State<AudioRecorderPage> {
       itemBuilder: (context, index) {
         final reverseIndex = _recordings.length - 1 - index;
         final path = _recordings[reverseIndex];
+        final isCurrentPlaying = _isPlaying && _recordingPath == path;
+
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
           child: Container(
@@ -295,9 +297,12 @@ class _AudioRecorderPageState extends State<AudioRecorderPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.play_arrow, color: Colors.white),
+                    icon: Icon(
+                      isCurrentPlaying ? Icons.pause : Icons.play_arrow,
+                      color: Colors.white,
+                    ),
                     onPressed: () async {
-                      if (_isPlaying) {
+                      if (isCurrentPlaying) {
                         await audioPlayer.stop();
                         setState(() {
                           _isPlaying = false;
